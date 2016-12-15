@@ -11,21 +11,20 @@ import CoreLocation
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
 
+	@IBOutlet weak var errorLabel: UILabel!
 	@IBOutlet weak var appTitle: UILabel!
 	
-	let locationManager = CLLocationManager()
+	let lM = CLLocationManager()
 	let storeManager: StoreManager = StoreManager()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		self.storeManager.deleteWeatherFromCoreDate()
 		appTitle.text = Configuration.appTitle
 		// get User Location
-		locationManager.delegate = self;
-		locationManager.desiredAccuracy = kCLLocationAccuracyBest
-		locationManager.requestWhenInUseAuthorization()
-		locationManager.startMonitoringSignificantLocationChanges()
-		CLLocationManager.authorizationStatus()
+		self.lM.delegate = self;
+		self.lM.desiredAccuracy = kCLLocationAccuracyBest
+		self.lM.requestAlwaysAuthorization()
+		
 		
 		// Do any additional setup after loading the view, typically from a nib.
 	}
@@ -35,22 +34,48 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 		// Dispose of any resources that can be recreated.
 	}
 	
+	func locationManager(_: CLLocationManager, didChangeAuthorization: CLAuthorizationStatus) {
+		if CLLocationManager.locationServicesEnabled() {
+			switch(CLLocationManager.authorizationStatus()) {
+			case .notDetermined, .restricted, .denied:
+				self.errorLabel.text = "plz enable localisation"
+			case .authorizedAlways, .authorizedWhenInUse:
+				self.errorLabel.text = ""
+				lM.startMonitoringSignificantLocationChanges()
+				CLLocationManager.authorizationStatus()
+			}
+		} else {
+			self.errorLabel.text = "localisation disabled"
+		}
+	}
+	
 	func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
 		let userLocation:CLLocation = locations[0]
 		Configuration.Long = Double(userLocation.coordinate.longitude)
 		Configuration.Lat = Double(userLocation.coordinate.latitude)
-		
+		print("\(String(Configuration.Long)) - \(String(Configuration.Lat))")
 		// Fetch Data from Url
 		WeatherDataManager(url: Configuration.urlToFetchForWeatherDataString).fetchWeatherForLocation(latitude: Configuration.Lat, longitude: Configuration.Long, apiKey: Configuration.apiKey) {
 			(response, error) in
-			guard let res = response else {
+			let res = response
+			if res != nil {
+				self.storeManager.deleteWeatherFromCoreDate()
+				// Creating data Entity
+				let entity = WeatherEntityCollection(weather: res!, type: .New)
+				// Saving data
+				if self.storeManager.storeWeather(weatherCollection: entity, viewController: self) == true {
+					self.performSegue(withIdentifier: "sendDataToTableView", sender: nil)
+				}
+			} else {
 				print(error!)
+				let entity = self.storeManager.fetchStoredWeather()
+				if entity[0] as! String == "error" {
+					self.errorLabel.text = "can't fetch data"
+				} else {
+					self.performSegue(withIdentifier: "sendDataToTableView", sender: nil)
+				}
 				return
 			}
-			// Creating data Entity
-			let entity = WeatherEntityCollection(weather: res, type: .New)
-			// Saving data
-			self.storeManager.storeWeather(weatherCollection: entity, viewController: self)
 		}
 	}
 

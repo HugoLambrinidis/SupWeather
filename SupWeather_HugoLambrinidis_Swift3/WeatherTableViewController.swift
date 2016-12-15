@@ -12,6 +12,8 @@ class WeatherTableViewController: UITableViewController {
 	
 	@IBOutlet weak var titleLable: UILabel!
 	
+	@IBOutlet weak var refreshTable: UIRefreshControl!
+	
 	var display: [WeatherEntity] = []
 	var imageUrl : UIImage = UIImage()
 	var weatherImageGetter: WeatherImageGetter = WeatherImageGetter()
@@ -22,8 +24,43 @@ class WeatherTableViewController: UITableViewController {
         super.viewDidLoad()
 
 		let entity = WeatherEntityCollection(weather: self.storeManager.fetchStoredWeather(), type: .Fetched)
-		self.display = entity.selectFiveToDisplay()
 		self.titleLable.text = entity.town
+		self.display = entity.selectFiveToDisplay()
+		self.refreshTable?.addTarget(self, action: #selector(WeatherTableViewController.handleRefresh(_:)), for: UIControlEvents.valueChanged)
+	}
+	
+	func handleRefresh(_ refreshControl: UIRefreshControl) {
+		/*WeatherDataManager(url: Configuration.urlToFetchForWeatherDataString).fetchWeatherForLocation(latitude: Configuration.Lat, longitude: Configuration.Long, apiKey: Configuration.apiKey) {
+			(response, error) in
+			let res = response
+			if res != nil {
+				self.storeManager.deleteWeatherFromCoreDate()
+				// Creating data Entity
+				let entity = WeatherEntityCollection(weather: res!, type: .New)
+				// Saving data
+				if self.storeManager.storeWeather(weatherCollection: entity, viewController: self) == true {
+					let weatherEntity = WeatherEntityCollection(weather: entity, type: .Fetched)
+					self.titleLable.text = weatherEntity.town
+					self.display = weatherEntity.selectFiveToDisplay()
+					self.tableView.reloadData()
+					refreshControl.endRefreshing()
+				}
+			} else {
+				print(error!)
+				let entity = self.storeManager.fetchStoredWeather()
+				if entity[0] as! String == "error" {
+					print("can't fetch new data")
+				} else {
+					let weatherEntity = WeatherEntityCollection(weather: entity, type: .Fetched)
+					self.titleLable.text = weatherEntity.town
+					self.display = weatherEntity.selectFiveToDisplay()
+					self.tableView.reloadData()
+					refreshControl.endRefreshing()
+				}
+				return
+			}
+		}*/
+		self.performSegue(withIdentifier: "refreshSegue", sender: nil)
 	}
 
     override func didReceiveMemoryWarning() {

@@ -32,11 +32,19 @@
                                 <rect key="frame" x="177" y="323" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="test test" textAlignment="center" lineBreakMode="clip" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flH-lz-gye">
+                                <rect key="frame" x="16" y="222" width="343" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.044050311128461361" blue="0.01524710569321186" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
                         <outlet property="appTitle" destination="oyc-Uk-EfV" id="LYj-7p-GlM"/>
+                        <outlet property="errorLabel" destination="flH-lz-gye" id="qLx-bW-wLX"/>
                         <segue destination="c5g-vy-U23" kind="show" identifier="sendDataToTableView" id="GJ1-A7-iMH"/>
                     </connections>
                 </viewController>
@@ -52,16 +60,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ppu-yW-seK">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ppu-yW-seK">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="83"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WeatherTableViewCell" rowHeight="150" id="eyY-y9-px8" customClass="WeatherTableViewCell" customModule="SupWeather_HugoLambrinidis_Swift3" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="375" height="150"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="WeatherTableViewCell" rowHeight="150" id="eyY-y9-px8" customClass="WeatherTableViewCell" customModule="SupWeather_HugoLambrinidis_Swift3" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="111" width="375" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eyY-y9-px8" id="x7K-AM-CKs">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="149.5"/>
@@ -91,7 +99,7 @@
                                     <outlet property="dateLabel" destination="Yu8-bY-rKx" id="xqb-gn-cp2"/>
                                     <outlet property="weatherDescriptionLabel" destination="Lem-7L-vcW" id="kwU-cO-e8v"/>
                                     <outlet property="weatherPicImage" destination="lyx-fe-alS" id="FFu-Qe-pAG"/>
-                                    <segue destination="HBJ-kD-mu7" kind="show" identifier="toDetailView" id="zSD-LN-DFk"/>
+                                    <segue destination="HBJ-kD-mu7" kind="show" identifier="toDetailView" id="l5Z-EU-xIm"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -100,8 +108,15 @@
                             <outlet property="delegate" destination="c5g-vy-U23" id="Qta-zo-4q3"/>
                         </connections>
                     </tableView>
+                    <refreshControl key="refreshControl" opaque="NO" multipleTouchEnabled="YES" contentMode="center" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" id="GXD-FL-L2d">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <attributedString key="attributedTitle"/>
+                    </refreshControl>
                     <connections>
+                        <outlet property="refreshTable" destination="GXD-FL-L2d" id="Qbs-zX-seJ"/>
                         <outlet property="titleLable" destination="Ppu-yW-seK" id="Qaa-pV-O5d"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="refreshSegue" id="ofQ-ff-szp"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tej-ew-M5R" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -116,50 +131,62 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <label key="tableFooterView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="N5q-EI-RMH">
-                            <rect key="frame" x="0.0" y="215" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                        <button key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="AJg-fS-Zel">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinY="YES" flexibleMaxY="YES"/>
+                            <state key="normal" title="retour"/>
+                            <connections>
+                                <segue destination="c5g-vy-U23" kind="show" identifier="backToWeatherTable" id="c9e-Zp-BBs"/>
+                            </connections>
+                        </button>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="WeatherDetailTableViewCell" id="d1W-8b-plV" customClass="WeatherDetailTableViewCell" customModule="SupWeather_HugoLambrinidis_Swift3" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="187"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="WeatherDetailTableViewCell" id="d1W-8b-plV" customClass="WeatherDetailTableViewCell" customModule="SupWeather_HugoLambrinidis_Swift3" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="98" width="375" height="187"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d1W-8b-plV" id="ZWS-v0-TMN">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="186"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="186.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JVN-Np-74b">
-                                            <rect key="frame" x="69" y="29" width="171" height="21"/>
+                                            <rect key="frame" x="8" y="29" width="232" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lTa-cz-OLX">
+                                            <rect key="frame" x="240" y="29" width="126" height="128"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLZ-b2-Kkr">
+                                            <rect key="frame" x="8" y="78" width="232" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4oD-IJ-lya">
+                                            <rect key="frame" x="8" y="111" width="224" height="46"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y06-se-BeZ">
-                                            <rect key="frame" x="69" y="54" width="171" height="21"/>
+                                            <rect key="frame" x="8" y="54" width="232" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lTa-cz-OLX">
-                                            <rect key="frame" x="240" y="29" width="127" height="128"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SLZ-b2-Kkr">
-                                            <rect key="frame" x="69" y="83" width="171" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <edgeInsets key="layoutMargins" top="23" left="8" bottom="8" right="8"/>
+                                <edgeInsets key="layoutMargins" top="23" left="0.0" bottom="8" right="8"/>
                                 <connections>
+                                    <outlet property="detailWeatherLabel" destination="4oD-IJ-lya" id="eIw-c4-Zux"/>
                                     <outlet property="hourLabel" destination="JVN-Np-74b" id="gGb-dM-oNg"/>
                                     <outlet property="tempLabel" destination="y06-se-BeZ" id="VgY-Rg-EW1"/>
                                     <outlet property="weatherImage" destination="lTa-cz-OLX" id="3WM-yE-iXB"/>
@@ -172,11 +199,13 @@
                             <outlet property="delegate" destination="HBJ-kD-mu7" id="0fc-MZ-Zja"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="obf-nS-VUq"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ai1-SH-vd8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1893.5999999999999" y="116.49175412293854"/>
+            <point key="canvasLocation" x="1776.8" y="85.907046476761622"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="GJ1-A7-iMH"/>
+    </inferredMetricsTieBreakers>
 </document>

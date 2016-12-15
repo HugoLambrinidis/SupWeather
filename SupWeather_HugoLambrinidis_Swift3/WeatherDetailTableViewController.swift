@@ -16,6 +16,7 @@ class WeatherDetailTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+		tableView.allowsSelection = false
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -52,6 +53,8 @@ class WeatherDetailTableViewController: UITableViewController {
 		cell.windLabel.text = String("\(weather[indexPath[1]].wind) Km/h")
 		
 		cell.tempLabel.text = String("\(weather[indexPath[1]].temp) °C")
+		
+		cell.detailWeatherLabel.text = String("\(weather[indexPath[1]].weatherDescription)")
 		
 		cell.weatherImage.image = self.weatherImageGetter.getImageForWeather(weather: self.weather[indexPath[1]].weather)
 		

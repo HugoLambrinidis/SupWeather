@@ -37,6 +37,7 @@ class WeatherEntityCollection {
 			break
 			
 		case .Fetched:
+			print(weather)
 			let arrayEntity = weather as! Array<Any>
 			let weatherFullInfosArray = arrayEntity[0] as! [String: Any]
 			self.town = weatherFullInfosArray["town"] as! String

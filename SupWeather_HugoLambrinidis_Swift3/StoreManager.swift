@@ -32,7 +32,7 @@ class StoreManager {
 		}
 	}
 	
-	func storeWeather(weatherCollection: WeatherEntityCollection, viewController: UIViewController) {
+	func storeWeather(weatherCollection: WeatherEntityCollection, viewController: UIViewController) -> Bool {
 		let entity = NSEntityDescription.insertNewObject(forEntityName: "Weather", into: managedContext)
 		
 		
@@ -61,14 +61,10 @@ class StoreManager {
 		do {
 			try managedContext.save()
 			print("It's saved ! ")
-			self.triggerSegueToWeatherTableView(viewController: viewController)
+			return true
 		} catch {
 			fatalError("Failure to save context: \(error)")
 		}
-	}
-	
-	func triggerSegueToWeatherTableView(viewController: UIViewController) {
-		viewController.performSegue(withIdentifier: "sendDataToTableView", sender: nil)
 	}
 	
 	func fetchStoredWeather() -> [Any]{
@@ -78,7 +74,7 @@ class StoreManager {
 			let fetchedWeather = try self.managedContext.fetch(weatherContent)
 			return fetchedWeather
 		} catch {
-			fatalError("Failed to fetch Weather: \(error)")
+			return [String("Error")!]
 		}
 	}
 	
